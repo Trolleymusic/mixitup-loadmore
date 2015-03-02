@@ -110,13 +110,13 @@
               if (this._sorting) {
                 this._printSort(true)
               }
+              
+              // Make the button
+              if (this._$button.length) {
+                this.generateButtons()
+              }
+              
             }
-            
-            // Make the button
-            if (this._$button.length) {
-              this.generateButtons()
-            }
-
           }
         }
       },
@@ -125,15 +125,25 @@
         pre: {
           loadmore: function (args) {
             var args = this._parseMultiMixArgs(args)
+            
+            // Reset
+            if (this._currentCount > this._$targets.length) {
+              this._currentCount = this._$targets.length
+            }
+            
             if (args.command.loadmore && args.command.loadmore === "more") {
               // Load more
               this._currentCount = this._currentCount + this.loadmore.loadMore
             } else if (args.command.loadmore && args.command.loadmore === "less") {
               // Load less
               this._currentCount = this.loadmore.initial
+            } else if (args.command.filter && args.command.filter === "all") {
+              // Filter has been turned off
+              this._currentCount = this.loadmore.initial
             } else if (args.command.filter || args.command.sort) {
-              // Let something else deal with it
-              this._currentCount = this._currentCount || this.loadmore.initial
+              // Make currentCount more than the targets so that
+              //  the buttons will disappear
+              this._currentCount = this._$targets.length + 1
             }
           }  
         }
@@ -151,12 +161,23 @@
     // Generate Load more and Less buttons
     generateButtons: function () {
       var buttonClass = this.loadmore.buttonClass || '',
-          buttonLabel = this.loadmore.buttonLabel || 'Load more',
-          buttonDisabled = this._currentCount == this._$targets.length ? ' disabled="disabled"' : '',
           lessClass = this.loadmore.lessClass || '',
+          buttonLabel = this.loadmore.buttonLabel || 'Load more',
           lessLabel = this.loadmore.lessLabel || 'Less',
-          lessDisabled = this._currentCount <= this.loadmore.initial ? ' disabled="disabled"' : '',
-          buttons = [
+          buttonDisabled,
+          lessDisabled,
+          disabled = ' disabled="disabled"',
+          buttons
+      
+      if (this._currentCount > this._$targets.length) {
+        buttonDisabled = disabled
+        lessDisabled = disabled
+      } else {
+        buttonDisabled = this._currentCount == this._$targets.length ? disabled : ''
+        lessDisabled = this._currentCount <= this.loadmore.initial ? disabled : ''
+      }
+      
+      buttons = [
             '<button class="', buttonClass, '"', buttonDisabled, '>', buttonLabel, '</button>',
             '<button class="', lessClass, '"', lessDisabled, '>', lessLabel, '</button>'
             ].join('')
