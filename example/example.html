@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>Mixitup-loadmore example</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .example {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .example-item {
+      background: blue;
+      display: none;
+      height: 200px;
+      margin: 10px;
+      padding: 10px;
+      width: 45%;
+    }
+
+    .loadmore-button {
+      background: green;
+    }
+
+    .loadmore-less {
+      background: orange;
+    }
+
+  </style>
+
+</head>
+<body>
+  <ol class="example">
+    <li class="example-item mix">1</li>
+    <li class="example-item mix">2</li>
+    <li class="example-item mix">3</li>
+    <li class="example-item mix">4</li>
+    <li class="example-item mix">5</li>
+    <li class="example-item mix">6</li>
+    <li class="example-item mix">7</li>
+    <li class="example-item mix">8</li>
+    <li class="example-item mix">9</li>
+    <li class="example-item mix">10</li>
+  </ol>
+
+  <div class="loadmore"></div>
+
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <script src="jquery.mixitup.min.js"></script>
+  <script src="../jquery.mixitup-loadmore.js"></script>
+
+  <script type="text/javascript">
+    $(function(){
+      $(".example").mixItUp({
+        selectors: {
+          target: ".example-item" // As in mixitup
+        },
+        layout: {
+          display: "inline-block" // As in mixitup
+        },
+        loadmore: {
+          // The number of items to start with
+          initial: 4,
+          // The number of items to load on click on the loadmore button
+          loadMore: 2,
+          // A selector string for the existing wrapper the buttons will be inserted into
+          buttonWrapper: ".loadmore",
+          // The class of the Load more button
+          buttonClass: "loadmore-button",
+          // The label of the Load more button
+          buttonLabel: "Load more",
+          // The class of the less button
+          lessClass: "loadmore-less",
+          // The label of the less button
+          lessLabel: "Reset"
+        }
+      });
+    });
+  </script>
+</body>
+</html>
